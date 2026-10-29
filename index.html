@@ -3,120 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DANMIUN - Tech Bento Dashboard</title>
+  <title>DANMIUN - Master Avatar Studio v7.0</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body id="body-theme" class="bg-[#0a0e17] text-white min-h-screen font-sans pb-12 transition-colors duration-300">
+<body class="bg-[#0a0e17] text-white min-h-screen font-sans pb-12">
 
-  <!-- Header Principal -->
+  <!-- Header -->
   <header class="border-b border-gray-800 bg-[#0d1117]/90 backdrop-blur sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <span class="text-2xl">⚡</span>
         <div>
           <h1 class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">DANMIUN</h1>
-          <p class="text-[10px] text-gray-400">Bento Tech System v5.0</p>
+          <p class="text-[10px] text-gray-400">Master Avatar Studio v7.0</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button id="btn-reset" class="text-xs bg-red-950/40 text-red-400 border border-red-800/50 px-3 py-1.5 rounded-xl transition">Reiniciar</button>
+        <button id="btn-abrir-studio" class="text-xs bg-sky-500 text-slate-950 font-bold px-4 py-2 rounded-xl transition shadow-lg shadow-sky-500/20">🎨 Abrir Avatar Studio</button>
+        <button id="btn-reset" class="text-xs bg-red-950/40 text-red-400 border border-red-800/50 px-3 py-2 rounded-xl transition">Reiniciar</button>
       </div>
     </div>
   </header>
 
-  <!-- Dashboard Principal (Bento Grid) -->
+  <!-- Bento Grid Dashboard -->
   <main class="max-w-6xl mx-auto px-4 mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
 
-    <!-- Tarjeta 1: Bienvenida / Motivación (Columna 1-4) -->
-    <div class="lg:col-span-4 bg-[#161b22] border border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-xl relative overflow-hidden">
+    <!-- Tarjeta Principal del Avatar (Columna 1-5) -->
+    <div class="lg:col-span-5 bg-[#161b22] border border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-xl relative overflow-hidden">
+      <div class="flex justify-between items-center">
+        <span class="text-xs font-mono text-sky-400 uppercase tracking-widest">Avatar Guardián</span>
+        <span class="text-xs bg-sky-500/10 text-sky-400 px-2.5 py-1 rounded-full border border-sky-500/30 font-mono" id="rango-nivel">Nivel 1</span>
+      </div>
+
+      <!-- Escenario del Avatar con Múltiples Capas Simultáneas -->
+      <div class="my-6 text-center relative py-8 bg-[#0d1117] rounded-2xl border border-gray-800/80">
+        <div id="avatar-principal" class="text-7xl inline-block transition-transform hover:scale-110 relative">
+          <span id="base-personaje">🦁</span>
+          <!-- Capas Múltiples de Accesorios -->
+          <span id="layer-cabeza" class="absolute -top-5 left-1/2 -translate-x-1/2 text-3xl"></span>
+          <span id="layer-ojos" class="absolute top-3 left-1/2 -translate-x-1/2 text-2xl"></span>
+          <span id="layer-ropa" class="absolute top-10 left-1/2 -translate-x-1/2 text-2xl"></span>
+          <span id="layer-extra" class="absolute -bottom-2 -right-2 text-2xl"></span>
+        </div>
+        <div class="mt-4 text-sm font-bold text-white" id="nombre-etapa">Cachorro Novato</div>
+        <div class="text-[10px] text-gray-400 mt-0.5" id="estado-racha-texto">Racha activa: 1 día 🔥</div>
+      </div>
+
+      <!-- Barra EXP -->
       <div>
-        <span class="text-xs font-mono text-sky-400 uppercase tracking-widest">Panel de Control</span>
-        <h2 class="text-xl font-bold mt-1 text-white">Pequeños hábitos, grandes cambios.</h2>
-        <p class="text-xs text-gray-400 mt-2">Mantén la disciplina diaria para evolucionar tu avatar y desbloquear el máximo poder.</p>
-      </div>
-      <div class="mt-6 bg-[#0d1117] p-4 rounded-2xl border border-gray-800/80 flex items-center gap-3">
-        <div class="text-3xl" id="avatar-preview">🦁</div>
-        <div>
-          <div class="text-xs font-bold text-white" id="nombre-avatar-ui">León Cachorro</div>
-          <div class="text-[10px] text-sky-400 font-mono" id="estado-evolucion">Fase 1: En desarrollo</div>
+        <div class="flex justify-between text-[10px] font-mono text-gray-400 mb-1">
+          <span>EXPERIENCIA</span>
+          <span id="puntos-text" class="text-sky-400 font-bold">0 / 50</span>
+        </div>
+        <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
+          <div id="barra-exp" class="bg-sky-400 h-full transition-all duration-300" style="width: 0%"></div>
         </div>
       </div>
     </div>
 
-    <!-- Tarjeta 2: Progreso de Hoy (Columna 5-8) -->
-    <div class="lg:col-span-4 bg-[#161b22] border border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-xl">
-      <div class="flex justify-between items-center">
-        <span class="text-xs font-mono text-gray-400 uppercase">Progreso Diario</span>
-        <span class="text-xs bg-sky-500/10 text-sky-400 px-2.5 py-1 rounded-full border border-sky-500/30 font-mono" id="porcentaje-texto">0%</span>
-      </div>
-      <div class="my-4 text-center">
-        <div class="text-3xl font-black text-white font-mono" id="completados-total">0 / 0</div>
-        <div class="text-xs text-gray-400 mt-1">Misiones completadas hoy</div>
-      </div>
-      <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
-        <div id="barra-progreso-hoy" class="bg-sky-400 h-full transition-all duration-300" style="width: 0%"></div>
-      </div>
-    </div>
-
-    <!-- Tarjeta 3: Racha Actual (Columna 9-12) -->
-    <div class="lg:col-span-4 bg-[#161b22] border border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-xl">
-      <div class="flex justify-between items-center">
-        <span class="text-xs font-mono text-gray-400 uppercase">Racha Actual</span>
-        <span class="text-xl">🔥</span>
-      </div>
-      <div class="text-center my-2">
-        <div class="text-4xl font-black text-amber-400 font-mono" id="racha-dias">1</div>
-        <div class="text-xs text-gray-400 mt-1">Días consecutivos con vida</div>
-      </div>
-      <div class="text-[10px] text-center text-gray-500 font-mono">¡No rompas la cadena o tu avatar envejecerá!</div>
-    </div>
-
-    <!-- Tarjeta 4: Selector de Personaje / Mascota y Accesorios (Columna 1-6) -->
-    <div class="lg:col-span-6 bg-[#161b22] border border-gray-800 rounded-3xl p-6 shadow-xl space-y-4">
-      <h3 class="text-sm font-bold text-gray-300 font-mono flex items-center gap-2"><span>👤</span> Personalizar Avatar & Accesorio</h3>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="text-[10px] text-gray-400 uppercase font-mono block mb-1">Elegir Personaje / Animal</label>
-          <select id="select-personaje" class="w-full bg-[#0d1117] border border-gray-700 text-sky-400 text-xs p-2.5 rounded-xl outline-none cursor-pointer">
-            <option value="🦁">🦁 León</option>
-            <option value="🦊">🦊 Zorro</option>
-            <option value="🐺">🐺 Lobo</option>
-            <option value="👦">👦 Hombre Cyber</option>
-            <option value="👧">👧 Mujer Cyber</option>
-          </select>
+    <!-- Gestor de Misiones (Columna 6-12) -->
+    <div class="lg:col-span-7 bg-[#161b22] border border-gray-800 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
+      <div>
+        <h3 class="text-sm font-bold text-gray-300 font-mono flex items-center gap-2 mb-4"><span>🎯</span> Misiones Diarias (DANMIUN)</h3>
+        <div class="flex gap-2 mb-4">
+          <input type="text" id="nuevo-habito-input" placeholder="Añadir nueva misión..." class="flex-1 bg-[#0d1117] border border-gray-700 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-sky-500">
+          <button id="btn-agregar" class="bg-sky-400 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs">+ Añadir</button>
         </div>
-        <div>
-          <label class="text-[10px] text-gray-400 uppercase font-mono block mb-1">Equipar Accesorio</label>
-          <select id="select-accesorio" class="w-full bg-[#0d1117] border border-gray-700 text-sky-400 text-xs p-2.5 rounded-xl outline-none cursor-pointer">
-            <option value="">Ninguno</option>
-            <option value="🕶️">🕶️ Gafas Neón</option>
-            <option value="👑">👑 Corona Real</option>
-            <option value="🎧">🎧 Audífonos Pro</option>
-            <option value="⭐">⭐ Aura Estelar</option>
-          </select>
-        </div>
+        <ul id="contenedor-habitos" class="space-y-2 max-h-48 overflow-y-auto pr-1"></ul>
       </div>
+      <p class="text-[11px] text-gray-400 font-mono bg-[#0d1117] p-3 rounded-xl border border-gray-800">
+        ✨ Haz clic en <span class="text-sky-400 font-bold">"Abrir Avatar Studio"</span> arriba para elegir entre más de 100 especies y combinar múltiples accesorios simultáneos.
+      </p>
     </div>
 
-    <!-- Tarjeta 5: Gestor de Hábitos / Misiones (Columna 7-12) -->
-    <div class="lg:col-span-6 bg-[#161b22] border border-gray-800 rounded-3xl p-6 shadow-xl space-y-4">
-      <h3 class="text-sm font-bold text-gray-300 font-mono flex items-center gap-2"><span>🎯</span> Misiones Diarias</h3>
-      <div class="flex gap-2">
-        <input type="text" id="nuevo-habito-input" placeholder="Nuevo hábito..." class="flex-1 bg-[#0d1117] border border-gray-700 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-sky-500">
-        <button id="btn-agregar" class="bg-sky-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs">Añadir</button>
-      </div>
-      <ul id="contenedor-habitos" class="space-y-2 max-h-40 overflow-y-auto pr-1"></ul>
-    </div>
-
-    <!-- Tarjeta 6: Gráfico Mensual / Semanal (Columna 1-12) -->
+    <!-- Gráfico de Rendimiento (Columna 1-12) -->
     <div class="lg:col-span-12 bg-[#161b22] border border-gray-800 rounded-3xl p-6 shadow-xl">
-      <h3 class="text-sm font-bold text-gray-300 font-mono mb-4">📊 Resumen de Actividad Global</h3>
-      <div class="h-48"><canvas id="grafico-semanal"></canvas></div>
+      <h3 class="text-sm font-bold text-gray-300 font-mono mb-2">📊 Actividad Semanal Global</h3>
+      <div class="h-44"><canvas id="grafico-semanal"></canvas></div>
     </div>
 
   </main>
+
+  <!-- VENTANA FLOTANTE MODAL: AVATAR STUDIO (MÁS DE 100 ESPECIES Y 220+ ACCESORIOS) -->
+  <div id="modal-studio" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#161b22] border border-sky-500/40 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0d1117]">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🛠️</span>
+          <h2 class="text-base font-bold text-white font-mono">DANMIUN Avatar & Accessory Studio</h2>
+        </div>
+        <button id="btn-cerrar-studio" class="text-gray-400 hover:text-white text-lg font-bold px-3 py-1 rounded-lg bg-gray-800/50">✕</button>
+      </div>
+
+      <!-- Modal Tabs (Navegación por categorías) -->
+      <div class="flex border-b border-gray-800 bg-[#0d1117]/50 px-4 gap-2 overflow-x-auto">
+        <button class="tab-btn py-3 px-4 text-xs font-bold font-mono border-b-2 border-sky-400 text-sky-400 whitespace-nowrap" data-tab="tab-especies">🦁 Especies (100+)</button>
+        <button class="tab-btn py-3 px-4 text-xs font-bold font-mono border-b-2 border-transparent text-gray-400 whitespace-nowrap" data-tab="tab-cabeza">👑 Cabeza (50+)</button>
+        <button class="tab-btn py-3 px-4 text-xs font-bold font-mono border-b-2 border-transparent text-gray-400 whitespace-nowrap" data-tab="tab-ojos">🕶️ Ojos / Rostro (50+)</button>
+        <button class="tab-btn py-3 px-4 text-xs font-bold font-mono border-b-2 border-transparent text-gray-400 whitespace-nowrap" data-tab="tab-ropa">🧥 Ropa / Cuerpo (60+)</button>
+        <button class="tab-btn py-3 px-4 text-xs font-bold font-mono border-b-2 border-transparent text-gray-400 whitespace-nowrap" data-tab="tab-extra">⚡ Efectos / Auras (60+)</button>
+      </div>
+
+      <!-- Modal Content Body (Grid de elementos seleccionables) -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-6 bg-[#161b22]">
+        
+        <!-- Tab 1: Especies Masivas -->
+        <div id="tab-especies" class="tab-content space-y-4">
+          <h4 class="text-xs font-mono text-gray-400 uppercase">Selecciona tu Especie o Avatar (Más de 100 opciones)</h4>
+          <div id="grid-especies" class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            <!-- Generado dinámicamente con JS -->
+          </div>
+        </div>
+
+        <!-- Tab 2: Cabeza -->
+        <div id="tab-cabeza" class="tab-content space-y-4 hidden">
+          <h4 class="text-xs font-mono text-gray-400 uppercase">Accesorios para la Cabeza (Sombreros, Coronas, Gorras)</h4>
+          <div id="grid-cabeza" class="grid grid-cols-3 sm:grid-cols-6 gap-3"></div>
+        </div>
+
+        <!-- Tab 3: Ojos -->
+        <div id="tab-ojos" class="tab-content space-y-4 hidden">
+          <h4 class="text-xs font-mono text-gray-400 uppercase">Accesorios para Ojos y Rostro (Gafas, Visores, Lentes)</h4>
+          <div id="grid-ojos" class="grid grid-cols-3 sm:grid-cols-6 gap-3"></div>
+        </div>
+
+        <!-- Tab 4: Ropa -->
+        <div id="tab-ropa" class="tab-content space-y-4 hidden">
+          <h4 class="text-xs font-mono text-gray-400 uppercase">Ropa y Atuendos Corporales</h4>
+          <div id="grid-ropa" class="grid grid-cols-3 sm:grid-cols-6 gap-3"></div>
+        </div>
+
+        <!-- Tab 5: Extras -->
+        <div id="tab-extra" class="tab-content space-y-4 hidden">
+          <h4 class="text-xs font-mono text-gray-400 uppercase">Efectos Especiales, Fuego y Auras</h4>
+          <div id="grid-extra" class="grid grid-cols-3 sm:grid-cols-6 gap-3"></div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-gray-800 bg-[#0d1117] flex justify-end">
+        <button id="btn-guardar-studio" class="bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-xs transition">Guardar y Aplicar Cambios</button>
+      </div>
+
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
