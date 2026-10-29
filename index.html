@@ -3,42 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DANMIUN - Tech Dashboard</title>
+  <title>DANMIUN - Tech Operating System</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js para Estadísticas -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-[#0a0e17] text-white min-h-screen font-sans pb-12">
+<body id="body-theme" class="bg-[#0a0e17] text-white min-h-screen font-sans pb-12 transition-colors duration-300">
 
   <!-- Encabezado / Header -->
-  <header class="border-b border-gray-800 bg-[#0d1117]/80 backdrop-blur sticky top-0 z-50">
+  <header class="border-b border-gray-800 bg-[#0d1117]/90 backdrop-blur sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <span class="text-3xl">⚡</span>
         <div>
           <h1 class="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-400 bg-clip-text text-transparent">DANMIUN</h1>
-          <p class="text-xs text-gray-400">System Operating Dashboard v2.0</p>
+          <p class="text-xs text-gray-400">System Operating Dashboard v3.0</p>
         </div>
       </div>
+      
       <div class="flex items-center space-x-3">
-        <button id="btn-reset" class="text-xs bg-red-950/40 text-red-400 border border-red-800/50 hover:bg-red-900/60 px-3 py-1.5 rounded-lg transition">Reiniciar Datos</button>
+        <!-- Switch Modo Claro / Oscuro -->
+        <button id="btn-theme" class="text-xs bg-gray-800 hover:bg-gray-700 text-sky-400 border border-gray-700 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+          <span id="theme-icon">🌙</span> <span id="theme-text">Modo Oscuro</span>
+        </button>
+        <button id="btn-reset" class="text-xs bg-red-950/40 text-red-400 border border-red-800/50 hover:bg-red-900/60 px-3 py-1.5 rounded-lg transition">Reiniciar</button>
       </div>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto px-4 mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- Columna Izquierda: Avatar y Métricas -->
+    <!-- Columna Izquierda: Avatar, Métricas y Pomodoro -->
     <div class="lg:col-span-4 space-y-6">
       <!-- Tarjeta Avatar -->
-      <div class="bg-[#161b22] border border-sky-500/30 rounded-2xl p-6 text-center shadow-lg shadow-sky-950/20 relative overflow-hidden">
+      <div class="bg-[#161b22] border border-sky-500/30 rounded-2xl p-6 text-center shadow-lg shadow-sky-950/20 relative overflow-hidden theme-card">
         <div class="absolute top-3 right-3 bg-sky-950/80 text-sky-400 text-xs px-2.5 py-1 rounded-full border border-sky-800/50 font-mono">
           NIVEL <span id="nivel">1</span>
         </div>
         <div class="my-4">
           <div id="avatar" class="text-7xl animate-bounce inline-block transition-transform hover:scale-110 cursor-pointer">🤖</div>
         </div>
-        <h2 id="rango-avatar" class="text-lg font-bold text-white mb-1">Unidad Novato</h2>
-        <p id="estado-avatar" class="text-xs text-sky-400 font-medium">¡Listo para la primera misión!</p>
+        <h2 id="rango-avatar" class="text-lg font-bold text-white mb-1">Unidad Cyber-01</h2>
+        <p id="estado-avatar" class="text-xs text-sky-400 font-medium">¡Listo para entrenar!</p>
         
         <!-- Barra de Experiencia -->
         <div class="mt-5 text-left">
@@ -52,15 +60,31 @@
         </div>
       </div>
 
-      <!-- Tarjeta Métricas -->
-      <div class="bg-[#161b22] border border-gray-800 rounded-2xl p-5 space-y-4">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono">Rendimiento Global</h3>
+      <!-- Temporizador Pomodoro -->
+      <div class="bg-[#161b22] border border-gray-800 rounded-2xl p-5 theme-card">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono mb-3 flex items-center gap-2">
+          <span>⏱️</span> Reloj Pomodoro
+        </h3>
+        <div class="text-center">
+          <div id="pomodoro-timer" class="text-4xl font-mono font-black text-sky-400 tracking-wider my-2">25:00</div>
+          <p id="pomodoro-status" class="text-xs text-gray-400 mb-4">Modo Enfoque</p>
+          <div class="flex justify-center gap-2">
+            <button id="btn-pomo-start" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs px-4 py-2 rounded-lg transition">Iniciar</button>
+            <button id="btn-pomo-pause" class="bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition">Pausa</button>
+            <button id="btn-pomo-reset" class="bg-gray-800 hover:bg-gray-700 text-gray-400 font-bold text-xs px-3 py-2 rounded-lg transition">↻</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rendimiento Global -->
+      <div class="bg-[#161b22] border border-gray-800 rounded-2xl p-5 space-y-4 theme-card">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono">Métricas de Rendimiento</h3>
         <div class="grid grid-cols-2 gap-3">
-          <div class="bg-[#0d1117] p-3 rounded-xl border border-gray-800/80">
+          <div class="bg-[#0d1117] p-3 rounded-xl border border-gray-800/80 theme-subcard">
             <div class="text-2xl font-black text-sky-400 font-mono" id="puntos-total">0</div>
             <div class="text-[10px] text-gray-400 uppercase">Puntos Totales</div>
           </div>
-          <div class="bg-[#0d1117] p-3 rounded-xl border border-gray-800/80">
+          <div class="bg-[#0d1117] p-3 rounded-xl border border-gray-800/80 theme-subcard">
             <div class="text-2xl font-black text-emerald-400 font-mono" id="completados-total">0</div>
             <div class="text-[10px] text-gray-400 uppercase">Misiones Listas</div>
           </div>
@@ -68,18 +92,19 @@
       </div>
     </div>
 
-    <!-- Columna Derecha: Gestor de Hábitos -->
+    <!-- Columna Derecha: Gestor de Hábitos y Gráfico -->
     <div class="lg:col-span-8 space-y-6">
-      <div class="bg-[#161b22] border border-gray-800 rounded-2xl p-6 shadow-xl">
+      <!-- Misiones -->
+      <div class="bg-[#161b22] border border-gray-800 rounded-2xl p-6 shadow-xl theme-card">
         <div class="flex justify-between items-center mb-5">
           <h3 class="text-lg font-bold text-white flex items-center gap-2">
             <span>🎯</span> Misiones Diarias (DANMIUN)
           </h3>
         </div>
 
-        <!-- Formulario para Agregar -->
+        <!-- Formulario -->
         <div class="flex gap-2 mb-6">
-          <input type="text" id="nuevo-habito-input" placeholder="Escribe un nuevo hábito o misión..." class="flex-1 bg-[#0d1117] border border-gray-700/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-500 text-white placeholder-gray-500 transition">
+          <input type="text" id="nuevo-habito-input" placeholder="Escribe un nuevo hábito o misión..." class="flex-1 bg-[#0d1117] border border-gray-700/80 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-500 text-white placeholder-gray-500 transition theme-subcard">
           <button id="btn-agregar" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-sm transition flex items-center gap-1 shadow-lg shadow-sky-500/20">
             + Añadir
           </button>
@@ -87,8 +112,18 @@
 
         <!-- Lista de Hábitos -->
         <ul id="contenedor-habitos" class="space-y-3">
-          <!-- Se cargan dinámicamente con JavaScript -->
+          <!-- Dinámico -->
         </ul>
+      </div>
+
+      <!-- Gráfico Semanal -->
+      <div class="bg-[#161b22] border border-gray-800 rounded-2xl p-6 theme-card">
+        <h3 class="text-sm font-bold text-gray-300 mb-4 flex items-center gap-2 font-mono">
+          <span>📊</span> Rendimiento Semanal (Chart.js)
+        </h3>
+        <div class="h-64">
+          <canvas id="grafico-semanal"></canvas>
+        </div>
       </div>
     </div>
 
