@@ -66,3 +66,27 @@ body.theme-light .text-white {
   50% { transform: scale(1.3) rotate(10deg); }
   100% { transform: scale(1); }
 }
+body { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+/* Temas de Color Dinámicos */
+body.accent-blue { --accent: #38bdf8; }
+body.accent-green { --accent: #4ade80; }
+body.accent-purple { --accent: #c084fc; }
+body.accent-red { --accent: #f87171; }
+
+.text-sky-400 { color: var(--accent) !important; }
+.bg-sky-500 { background-color: var(--accent) !important; }
+.border-sky-500 { border-color: var(--accent) !important; }
+
+/* Modo Claro */
+body.theme-light { background-color: #f1f5f9 !important; color: #0f172a !important; }
+body.theme-light .theme-card { background-color: #ffffff !important; border-color: #e2e8f0 !important; }
+body.theme-light .theme-subcard { background-color: #f8fafc !important; border-color: #cbd5e1 !important; color: #0f172a !important; }
+body.theme-light h2, body.theme-light h3, body.theme-light .text-white { color: #0f172a !important; }
+
+.animacion-celebrar { animation: celebrar 0.5s ease-in-out; }
+@keyframes celebrar {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3) rotate(10deg); }
+  100% { transform: scale(1); }
+}
