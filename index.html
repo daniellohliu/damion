@@ -10,159 +10,218 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body id="app-body" class="bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300">
-  
-  <div class="max-w-4xl mx-auto px-4 py-6">
-    <!-- Header -->
-    <header class="flex justify-between items-center mb-8 pb-4 border-b border-slate-800" id="main-header">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/30">
+<body id="app-body" class="bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300 pb-24">
+
+  <!-- CONTENEDOR DE AUTENTICACIÓN (LOGIN / SIGN UP) -->
+  <div id="auth-container" class="max-w-md mx-auto px-4 py-12">
+    <div class="bg-slate-900/80 border border-slate-800 backdrop-blur-xl rounded-3xl p-8 shadow-2xl">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center font-bold text-2xl text-white shadow-lg shadow-blue-500/30">
           D
         </div>
-        <div>
-          <h1 class="text-xl font-black tracking-wider text-slate-100" id="title-text">
-            DANMIUN <span class="text-xs text-blue-400 font-normal ml-1">v2.0</span>
-          </h1>
-          <p class="text-xs text-slate-400">Master Avatar Studio</p>
-        </div>
+        <h1 class="text-2xl font-black tracking-wider text-slate-100">DANMIUN</h1>
+        <p class="text-xs text-slate-400 mt-1" data-i18n="subtitle">Master Avatar Studio & Habit Tracker</p>
       </div>
 
-      <div class="flex items-center gap-3">
-        <!-- Selector Modo Claro / Oscuro -->
-        <button id="btn-toggle-theme" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-xs font-medium hover:border-blue-500 transition">
-          <i data-lucide="sun" id="icon-sun" class="w-4 h-4 text-amber-400 hidden"></i>
-          <i data-lucide="moon" id="icon-moon" class="w-4 h-4 text-blue-400"></i>
-          <span id="theme-label">Modo Oscuro</span>
-        </button>
+      <form id="auth-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="email_label">Correo electrónico</label>
+          <input type="email" id="auth-email" placeholder="andrew@gmail.com" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="user_label">Nombre de usuario</label>
+          <input type="text" id="auth-username" placeholder="@andrew_10" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="pass_label">Contraseña</label>
+          <input type="password" id="auth-password" placeholder="••••••••" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+        </div>
 
-        <!-- Botón Nueva Misión -->
-        <button id="btn-open-modal" class="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs rounded-lg shadow-lg shadow-blue-600/30 transition">
-          <i data-lucide="plus" class="w-4 h-4"></i> Nueva Misión
+        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-600/30 transition mt-2" data-i18n="btn_signup">
+          Sign Up / Registrarse
         </button>
+      </form>
+
+      <div class="mt-6 flex justify-between items-center text-xs">
+        <button id="btn-toggle-lang" class="text-blue-400 hover:underline font-semibold">🌐 English / Español</button>
+        <button id="btn-toggle-theme-auth" class="text-slate-400 hover:text-slate-200">🌓 Cambiar Tema</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APLICACIÓN PRINCIPAL (OCULTA HASTA INICIAR SESIÓN) -->
+  <div id="main-app" class="max-w-md mx-auto px-4 py-6 hidden">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-6">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" class="w-10 h-10 rounded-full border border-blue-500/40 object-cover" />
+        <div>
+          <p class="text-[10px] text-slate-400">Hi, <span id="header-username" class="text-slate-200 font-bold">Andrew Nathan</span> 👋</p>
+          <h2 class="text-xs font-bold text-blue-400" data-i18n="build_habit">Build a Habit Today!</h2>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-lang-main" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-bold">🌐</button>
+        <button id="btn-theme-main" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white">🌓</button>
       </div>
     </header>
 
-    <!-- Pestañas de Navegación -->
-    <nav class="flex gap-2 mb-6 p-1 bg-slate-900/60 rounded-xl border border-slate-800/80" id="nav-container">
-      <button class="nav-tab flex-1 py-2 rounded-lg text-xs font-semibold text-center transition bg-blue-600 text-white shadow-md shadow-blue-600/20" data-tab="dashboard">
-        Dashboard
-      </button>
-      <button class="nav-tab flex-1 py-2 rounded-lg text-xs font-semibold text-center transition text-slate-400 hover:text-slate-200" data-tab="avatar">
-        Avatar Studio
-      </button>
-      <button class="nav-tab flex-1 py-2 rounded-lg text-xs font-semibold text-center transition text-slate-400 hover:text-slate-200" data-tab="community">
-        Comunidad
-      </button>
-    </nav>
+    <!-- VISTA 1: DASHBOARD -->
+    <div id="view-dashboard" class="view-screen space-y-5">
+      <!-- Banner Comunidad -->
+      <div class="p-4 rounded-2xl bg-gradient-to-r from-blue-950/40 to-slate-900 border border-blue-500/30 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-blue-400">120 New Community Posts ></p>
+        </div>
+        <div class="flex -space-x-2">
+          <div class="w-7 h-7 rounded-full bg-blue-600 border border-slate-900 text-[10px] flex items-center justify-center font-bold">AN</div>
+          <div class="w-7 h-7 rounded-full bg-cyan-600 border border-slate-900 text-[10px] flex items-center justify-center font-bold">DM</div>
+        </div>
+      </div>
 
-    <!-- Vista 1: Dashboard -->
-    <section id="view-dashboard" class="view-content">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Carrusel / Galería de motivación -->
+      <div class="grid grid-cols-4 gap-2">
+        <div class="h-24 rounded-xl bg-slate-900 border border-slate-800 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=150&h=150&fit=crop" class="w-full h-full object-cover opacity-70"></div>
+        <div class="h-24 rounded-xl bg-slate-900 border border-slate-800 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=150&h=150&fit=crop" class="w-full h-full object-cover opacity-70"></div>
+        <div class="h-24 rounded-xl bg-slate-900 border border-slate-800 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=150&h=150&fit=crop" class="w-full h-full object-cover opacity-70"></div>
+        <div class="h-24 rounded-xl bg-slate-900 border border-slate-800 overflow-hidden relative"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=150&h=150&fit=crop" class="w-full h-full object-cover opacity-70"></div>
+      </div>
+
+      <!-- Estadísticas de Hábitos (Gráfica) -->
+      <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-5">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400" data-i18n="habits_stats">Habits Statistics</h3>
+        </div>
+        <div class="h-32 flex items-end justify-between gap-1 pt-4" id="dashboard-weekly-bars"></div>
         
-        <!-- Tarjeta de Progreso Avatar -->
-        <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between" id="card-avatar-summary">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Avatar Guardián</span>
-              <span class="text-xs px-2 py-0.5 rounded-full bg-blue-950/80 border border-blue-500/30 text-blue-300 font-bold" id="badge-level">Nivel 1</span>
-            </div>
-            
-            <div class="flex items-center gap-4 my-3">
-              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-900 to-slate-900 border border-blue-500/30 flex items-center justify-center shadow-lg shadow-blue-500/10">
-                <i data-lucide="shield" class="w-8 h-8 text-blue-400"></i>
-              </div>
-              <div>
-                <h2 class="font-bold text-slate-100 text-base" id="user-role">Cochinos / Nómada</h2>
-                <p class="text-xs text-slate-400">Tiempo activo: <span class="text-slate-200">1 día</span></p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-xs mb-1">
-              <span class="text-slate-400">Experiencia</span>
-              <span class="font-semibold text-blue-400" id="xp-text">20 / 50 XP</span>
-            </div>
-            <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-              <div id="xp-bar" class="h-full bg-gradient-to-r from-blue-600 to-cyan-400 transition-all duration-500" style="width: 40%"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Gráfica de Actividad Semanal -->
-        <div class="md:col-span-2 bg-slate-900/40 border border-slate-800 rounded-2xl p-5" id="card-chart">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-blue-400 mb-4">Actividad Semanal Global</h2>
-          <div class="h-36 flex items-end justify-between gap-2 pt-4 px-2" id="weekly-bars">
-            <!-- Renderizado dinámico desde JS -->
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Sección Misiones Diarias -->
-      <div class="mt-6 bg-slate-900/40 border border-slate-800 rounded-2xl p-5" id="card-habits">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-blue-400 mb-4">Misiones Diarias (DANMIUN)</h2>
-        <div class="space-y-3" id="habits-list">
-          <!-- Renderizado dinámico de hábitos -->
+        <!-- Filtros de Estado -->
+        <div class="flex gap-2 mt-4 pt-3 border-t border-slate-800/80 text-[11px]">
+          <button class="px-3 py-1 rounded-full bg-blue-600 text-white font-semibold" data-filter="all">Ongoing</button>
+          <button class="px-3 py-1 rounded-full bg-slate-800 text-slate-400" data-filter="upcoming">Upcoming</button>
+          <button class="px-3 py-1 rounded-full bg-slate-800 text-slate-400" data-filter="completed">Completed</button>
         </div>
       </div>
-    </section>
 
-    <!-- Vista 2: Avatar Studio (Oculta por defecto) -->
-    <section id="view-avatar" class="view-content hidden">
-      <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 text-center">
-        <div class="w-24 h-24 mx-auto mb-4 rounded-3xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-xl shadow-blue-500/20">
-          <i data-lucide="zap" class="w-12 h-12 text-white"></i>
-        </div>
-        <h2 class="text-xl font-bold text-slate-100">Personaliza tu Guardián</h2>
-        <p class="text-xs text-slate-400 max-w-md mx-auto mt-1 mb-6">Desbloquea aspectos, títulos y habilidades al mantener tus rachas diarias.</p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="avatar-items">
-          <!-- Renderizado desde JS -->
+      <!-- Lista de Hábitos Activos -->
+      <div class="space-y-3" id="dashboard-habits-list">
+        <!-- Generado dinámicamente -->
+      </div>
+    </div>
+
+    <!-- VISTA 2: DETALLES DE HÁBITO -->
+    <div id="view-habit-detail" class="view-screen space-y-5 hidden">
+      <div class="flex items-center justify-between mb-2">
+        <button id="btn-back-dashboard" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">❮</button>
+        <h3 class="text-sm font-bold text-slate-100" data-i18n="habit_details">Habit Details</h3>
+        <button class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">⋮</button>
+      </div>
+
+      <!-- Selector Calendario Mes -->
+      <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-center">
+        <p class="text-xs font-bold text-slate-400 mb-3">June, 2024</p>
+        <div class="grid grid-cols-7 gap-1 text-center text-xs">
+          <div><span class="text-[10px] text-slate-500 block">MON</span>14</div>
+          <div><span class="text-[10px] text-slate-500 block">TUE</span>16</div>
+          <div class="bg-blue-600 text-white rounded-xl py-1"><span class="text-[10px] text-blue-200 block">WED</span>15</div>
+          <div><span class="text-[10px] text-slate-500 block">THU</span>17</div>
+          <div><span class="text-[10px] text-slate-500 block">FRI</span>18</div>
+          <div><span class="text-[10px] text-slate-500 block">SAT</span>19</div>
+          <div><span class="text-[10px] text-slate-500 block">SUN</span>13</div>
         </div>
       </div>
-    </section>
 
-    <!-- Vista 3: Comunidad (Oculta por defecto) -->
-    <section id="view-community" class="view-content hidden">
-      <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-blue-400 mb-4">Desafíos de la Comunidad</h2>
-        <div class="p-4 rounded-xl border border-blue-500/20 bg-blue-950/20 mb-4 flex items-center justify-between">
-          <div>
-            <h3 class="text-sm font-bold text-slate-200">Reto Global: 7 Días de Constancia</h3>
-            <p class="text-xs text-slate-400">120 usuarios participando actualmente.</p>
+      <!-- Tarjeta Detalle Hábito -->
+      <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 space-y-4">
+        <div class="flex justify-between items-start">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-xl">🏃‍♂️</div>
+            <div>
+              <h4 class="font-bold text-slate-100 text-sm">Daily Running</h4>
+              <p class="text-[10px] text-slate-400">Exercise for at least 30 minutes each day.</p>
+            </div>
           </div>
-          <button class="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-500 transition">Unirme</button>
+          <span class="text-xs bg-red-950/50 text-red-400 border border-red-500/30 px-2 py-1 rounded-lg flex items-center gap-1">⏱️ 22:34:04</span>
         </div>
-      </div>
-    </section>
-  </div>
 
-  <!-- Modal para Agregar Nueva Misión -->
-  <div id="modal-new-habit" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 shadow-2xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-sm font-bold text-slate-100">Crear Nueva Misión</h3>
-        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-200">
-          <i data-lucide="x" class="w-5 h-5"></i>
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400">🔥</span>
+            <div>
+              <p class="text-xs font-bold text-slate-200">8 Days on Fire</p>
+              <p class="text-[10px] text-slate-400">June 10, 2024 to June 30, 2024</p>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-full border-2 border-green-500 flex items-center justify-center text-green-400 text-xs">✓</div>
+        </div>
+
+        <!-- Refuerzo Negativo -->
+        <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs space-y-2">
+          <div class="flex justify-between text-slate-400">
+            <span data-i18n="neg_reinforce">Negative (-) Reinforcements</span>
+            <span>ℹ️</span>
+          </div>
+          <div class="flex justify-between font-semibold text-slate-200">
+            <span>Donation Organization: <strong class="text-blue-400">Doctors Without Borders</strong></span>
+            <span>$5</span>
+          </div>
+        </div>
+
+        <button onclick="markHabitComplete()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-600/30 transition text-center" data-i18n="btn_complete">
+          Mark Habit As Complete
         </button>
       </div>
-      <form id="form-new-habit" class="space-y-4">
+    </div>
+
+    <!-- VISTA 3: PERFIL -->
+    <div id="view-profile" class="view-screen space-y-5 hidden">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-sm font-bold text-slate-100" data-i18n="profile">Profile</h3>
+        <button class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">⚙️</button>
+      </div>
+
+      <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces" class="w-20 h-20 mx-auto rounded-full border-2 border-blue-500 object-cover shadow-lg" />
+        <h4 class="font-bold text-base text-slate-100">Andrew Nathan</h4>
+        <p class="text-xs text-blue-400">@andrew_10</p>
+        <p class="text-[10px] text-slate-400">Joined: June 10, 2024</p>
+        <button class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md" data-i18n="edit_profile">Edit Profile</button>
+      </div>
+
+      <!-- Stats Medallas -->
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div class="bg-slate-900/50 border border-slate-800 p-3 rounded-xl"><span class="text-blue-400 text-sm font-bold block">200</span><span class="text-[10px] text-slate-400">Friends</span></div>
+        <div class="bg-slate-900/50 border border-slate-800 p-3 rounded-xl"><span class="text-purple-400 text-sm font-bold block">100</span><span class="text-[10px] text-slate-400">Token Points</span></div>
+        <div class="bg-slate-900/50 border border-slate-800 p-3 rounded-xl"><span class="text-amber-400 text-sm font-bold block">30</span><span class="text-[10px] text-slate-400">Fire Points</span></div>
+      </div>
+    </div>
+
+    <!-- MENÚ DE NAVEGACIÓN INFERIOR (ESTILO APP MÓVIL) -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-3 bg-slate-950/90 backdrop-blur-md border-t border-slate-800 flex justify-around items-center z-40">
+      <button onclick="switchTab('dashboard')" class="nav-btn p-2 text-blue-400" data-tab="dashboard">🏠</button>
+      <button onclick="switchTab('community')" class="nav-btn p-2 text-slate-400" data-tab="community">👥</button>
+      <button onclick="openModal()" class="w-12 h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-blue-600/40 -mt-6 border-4 border-slate-950">＋</button>
+      <button onclick="switchTab('habit-detail')" class="nav-btn p-2 text-slate-400" data-tab="habit-detail">📊</button>
+      <button onclick="switchTab('profile')" class="nav-btn p-2 text-slate-400" data-tab="profile">👤</button>
+    </nav>
+  </div>
+
+  <!-- MODAL NUEVO HÁBITO -->
+  <div id="modal-habit" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xs font-bold text-slate-100 uppercase tracking-wider text-blue-400">New Habit Mission</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form id="form-new-habit" class="space-y-3">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre de la misión</label>
-          <input type="text" id="habit-title" placeholder="Ej: Leer 15 páginas" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+          <label class="block text-[10px] font-semibold text-slate-300 mb-1">Habit Title</label>
+          <input type="text" id="new-habit-title" placeholder="Ej: Meditar 10 mins" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Recompensa (XP)</label>
-          <input type="number" id="habit-xp" value="10" min="5" max="50" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
-        </div>
-        <div class="pt-2 flex justify-end gap-2">
-          <button type="button" id="btn-cancel-modal" class="px-4 py-2 border border-slate-800 text-xs font-semibold text-slate-400 rounded-lg hover:bg-slate-800">Cancelar</button>
-          <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white rounded-lg">Guardar Misión</button>
-        </div>
+        <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md">Create Habit</button>
       </form>
     </div>
   </div>
 
-  <script src="script.jjs"></script>
+  <script src="script.js"></script>
 </body>
-</html> 
+</html>

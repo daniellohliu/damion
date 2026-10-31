@@ -1,243 +1,146 @@
-// Estado global de la aplicación
+// Estado Global de la App
 const state = {
+  lang: 'es', // 'es' | 'en'
   theme: 'dark', // 'dark' | 'light'
-  xp: 20,
-  maxXp: 50,
-  level: 1,
+  user: { name: 'Andrew Nathan', email: 'andrew@gmail.com' },
   habits: [
-    { id: 1, title: 'Estudiar 30 minutos', completed: false, xp: 10 },
-    { id: 2, title: 'Tomar 2L de agua', completed: false, xp: 10 },
-    { id: 3, title: 'Ejercicio 30 min', completed: false, xp: 10 }
+    { id: 1, title: 'Daily Running', category: 'ongoing', completed: false, time: '22:34:04' },
+    { id: 2, title: 'Journaling & Reflection', category: 'upcoming', completed: false, time: '15:00:00' }
   ],
-  weeklyActivity: [
-    { day: 'Lun', val: 7 },
-    { day: 'Mar', val: 12 },
-    { day: 'Mié', val: 5 },
-    { day: 'Jue', val: 9 },
-    { day: 'Vie', val: 14 },
-    { day: 'Sáb', val: 4 },
-    { day: 'Dom', val: 8 }
-  ],
-  avatarItems: [
-    { id: 1, title: 'Escudo Nómada', unlocked: true },
-    { id: 2, title: 'Capa Neón', unlocked: false },
-    { id: 3, title: 'Casco Titán', unlocked: false },
-    { id: 4, title: 'Aura Eléctrica', unlocked: false }
-  ]
+  weekly: [6, 12, 8, 14, 5, 11, 9]
 };
 
-// Inicialización
+// Traducciones
+const translations = {
+  es: {
+    subtitle: 'Estudio de Avatar y Gestor de Hábitos',
+    email_label: 'Correo electrónico',
+    user_label: 'Nombre de usuario',
+    pass_label: 'Contraseña',
+    btn_signup: 'Registrarse / Iniciar Sesión',
+    build_habit: '¡Construye un hábito hoy!',
+    habits_stats: 'Estadísticas de Hábitos',
+    habit_details: 'Detalles del Hábito',
+    neg_reinforce: 'Refuerzos Negativos (-)',
+    btn_complete: 'Marcar Hábito como Completado',
+    profile: 'Perfil de Usuario',
+    edit_profile: 'Editar Perfil'
+  },
+  en: {
+    subtitle: 'Master Avatar Studio & Habit Tracker',
+    email_label: 'Email address',
+    user_label: 'Username',
+    pass_label: 'Password',
+    btn_signup: 'Sign Up / Log In',
+    build_habit: 'Build a Habit Today!',
+    habits_stats: 'Habits Statistics',
+    habit_details: 'Habit Details',
+    neg_reinforce: 'Negative (-) Reinforcements',
+    btn_complete: 'Mark Habit As Complete',
+    profile: 'User Profile',
+    edit_profile: 'Edit Profile'
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-  renderApp();
   setupEventListeners();
-  lucide.createIcons();
+  renderWeeklyBars();
+  renderHabitsList();
 });
 
-// Renderizar la interfaz
-function renderApp() {
-  renderHabits();
-  renderWeeklyChart();
-  renderAvatarItems();
-  updateProgressUI();
-}
-
-// Configurar oyentes de eventos
 function setupEventListeners() {
-  // Cambio de modo claro / oscuro
-  document.getElementById('btn-toggle-theme').addEventListener('click', toggleTheme);
-
-  // Navegación por pestañas
-  document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.addEventListener('click', (e) => switchTab(e.target.dataset.tab));
+  // Autenticación simulada
+  document.getElementById('auth-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('auth-username').value;
+    state.user.name = username;
+    document.getElementById('header-username').textContent = username;
+    
+    document.getElementById('auth-container').classList.add('hidden');
+    document.getElementById('main-app').classList.remove('hidden');
   });
 
-  // Modal
-  document.getElementById('btn-open-modal').addEventListener('click', () => toggleModal(true));
-  document.getElementById('btn-close-modal').addEventListener('click', () => toggleModal(false));
-  document.getElementById('btn-cancel-modal').addEventListener('click', () => toggleModal(false));
-  document.getElementById('form-new-habit').addEventListener('submit', handleAddHabit);
+  // Cambio de Idioma
+  document.getElementById('btn-toggle-lang').addEventListener('click', toggleLanguage);
+  document.getElementById('btn-lang-main').addEventListener('click', toggleLanguage);
+
+  // Cambio de Tema
+  document.getElementById('btn-toggle-theme-auth').addEventListener('click', toggleTheme);
+  document.getElementById('btn-theme-main').addEventListener('click', toggleTheme);
+
+  // Crear Hábito
+  document.getElementById('form-new-habit').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('new-habit-title').value;
+    state.habits.push({ id: Date.now(), title, category: 'ongoing', completed: false, time: '00:00:00' });
+    document.getElementById('new-habit-title').value = '';
+    closeModal();
+    renderHabitsList();
+  });
 }
 
-// Alternar Tema (Oscuro / Claro)
+function toggleLanguage() {
+  state.lang = state.lang === 'es' ? 'en' : 'es';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[state.lang][key]) {
+      el.textContent = translations[state.lang][key];
+    }
+  });
+}
+
 function toggleTheme() {
   state.theme = state.theme === 'dark' ? 'light' : 'dark';
   const body = document.getElementById('app-body');
-  const iconSun = document.getElementById('icon-sun');
-  const iconMoon = document.getElementById('icon-moon');
-  const themeLabel = document.getElementById('theme-label');
-
   if (state.theme === 'light') {
     body.classList.remove('bg-slate-950', 'text-slate-100');
-    body.classList.add('bg-slate-50', 'text-slate-900');
-    iconSun.classList.remove('hidden');
-    iconMoon.classList.add('hidden');
-    themeLabel.textContent = 'Modo Claro';
+    body.classList.add('bg-slate-100', 'text-slate-900');
   } else {
-    body.classList.remove('bg-slate-50', 'text-slate-900');
+    body.classList.remove('bg-slate-100', 'text-slate-900');
     body.classList.add('bg-slate-950', 'text-slate-100');
-    iconSun.classList.add('hidden');
-    iconMoon.classList.remove('hidden');
-    themeLabel.textContent = 'Modo Oscuro';
   }
 }
 
-// Cambiar de Pestaña
 function switchTab(tabId) {
-  document.querySelectorAll('.nav-tab').forEach(btn => {
-    if (btn.dataset.tab === tabId) {
-      btn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
-      btn.classList.remove('text-slate-400');
-    } else {
-      btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
-      btn.classList.add('text-slate-400');
-    }
-  });
-
-  document.querySelectorAll('.view-content').forEach(view => {
-    view.classList.add('hidden');
-  });
+  document.querySelectorAll('.view-screen').forEach(screen => screen.classList.add('hidden'));
   document.getElementById(`view-${tabId}`).classList.remove('hidden');
 }
 
-// Renderizar Misiones/Hábitos
-function renderHabits() {
-  const container = document.getElementById('habits-list');
+function renderWeeklyBars() {
+  const container = document.getElementById('dashboard-weekly-bars');
   container.innerHTML = '';
-
-  state.habits.forEach(habit => {
-    const item = document.createElement('div');
-    item.className = `flex items-center justify-between p-3.5 rounded-xl border transition ${
-      habit.completed 
-        ? 'bg-blue-950/20 border-blue-500/30' 
-        : 'bg-slate-950/40 border-slate-800 hover:border-slate-700'
-    }`;
-
-    item.innerHTML = `
-      <div class="flex items-center gap-3">
-        <button onclick="toggleHabit(${habit.id})" class="w-5 h-5 rounded-md border flex items-center justify-center transition ${
-          habit.completed 
-            ? 'bg-blue-600 border-blue-500 text-white' 
-            : 'border-slate-700 hover:border-blue-500'
-        }">
-          ${habit.completed ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
-        </button>
-        <span class="text-xs font-medium ${habit.completed ? 'line-through text-slate-500' : 'text-slate-200'}">
-          ${habit.title}
-        </span>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-900/30 text-blue-400 border border-blue-500/20">
-          +${habit.xp} XP
-        </span>
-        <button onclick="deleteHabit(${habit.id})" class="text-slate-500 hover:text-red-400 transition">
-          <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-      </div>
-    `;
-    container.appendChild(item);
-  });
-  lucide.createIcons();
-}
-
-// Completar/Descompletar Hábito
-function toggleHabit(id) {
-  const habit = state.habits.find(h => h.id === id);
-  if (!habit) return;
-
-  habit.completed = !habit.completed;
-  if (habit.completed) {
-    state.xp += habit.xp;
-    if (state.xp >= state.maxXp) {
-      state.level += 1;
-      state.xp = state.xp - state.maxXp;
-      state.maxXp += 20;
-    }
-  } else {
-    state.xp = Math.max(0, state.xp - habit.xp);
-  }
-
-  renderApp();
-}
-
-// Eliminar Hábito
-function deleteHabit(id) {
-  state.habits = state.habits.filter(h => h.id !== id);
-  renderApp();
-}
-
-// Agregar Nuevo Hábito
-function handleAddHabit(e) {
-  e.preventDefault();
-  const titleInput = document.getElementById('habit-title');
-  const xpInput = document.getElementById('habit-xp');
-
-  const newHabit = {
-    id: Date.now(),
-    title: titleInput.value.trim(),
-    completed: false,
-    xp: parseInt(xpInput.value) || 10
-  };
-
-  state.habits.push(newHabit);
-  titleInput.value = '';
-  toggleModal(false);
-  renderApp();
-}
-
-// Abrir/Cerrar Modal
-function toggleModal(show) {
-  const modal = document.getElementById('modal-new-habit');
-  if (show) {
-    modal.classList.remove('hidden');
-  } else {
-    modal.classList.add('hidden');
-  }
-}
-
-// Actualizar Barra de XP y Nivel
-function updateProgressUI() {
-  document.getElementById('badge-level').textContent = `Nivel ${state.level}`;
-  document.getElementById('xp-text').textContent = `${state.xp} / ${state.maxXp} XP`;
-  const pct = Math.min(100, Math.round((state.xp / state.maxXp) * 100));
-  document.getElementById('xp-bar').style.width = `${pct}%`;
-}
-
-// Renderizar Gráfica Semanal
-function renderWeeklyChart() {
-  const container = document.getElementById('weekly-bars');
-  container.innerHTML = '';
-  const maxVal = Math.max(...state.weeklyActivity.map(item => item.val));
-
-  state.weeklyActivity.forEach(item => {
-    const heightPct = Math.round((item.val / maxVal) * 100);
+  const max = Math.max(...state.weekly);
+  
+  state.weekly.forEach(val => {
+    const height = Math.round((val / max) * 100);
     const bar = document.createElement('div');
-    bar.className = 'flex-1 flex flex-col items-center gap-2 h-full justify-end group';
-    bar.innerHTML = `
-      <div class="w-full bg-slate-800/80 rounded-lg group-hover:bg-blue-600/40 transition-all duration-300 relative overflow-hidden" style="height: ${heightPct}%">
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-cyan-400 opacity-80"></div>
-      </div>
-      <span class="text-[10px] font-medium text-slate-400">${item.day}</span>
-    `;
+    bar.className = 'flex-1 bg-gradient-to-t from-blue-600 to-cyan-400 rounded-t-lg transition-all';
+    bar.style.height = `${height}%`;
     container.appendChild(bar);
   });
 }
 
-// Renderizar Items del Avatar
-function renderAvatarItems() {
-  const container = document.getElementById('avatar-items');
+function renderHabitsList() {
+  const container = document.getElementById('dashboard-habits-list');
   container.innerHTML = '';
 
-  state.avatarItems.forEach(item => {
-    const box = document.createElement('div');
-    box.className = `p-4 rounded-xl border text-center transition ${
-      item.unlocked 
-        ? 'bg-blue-950/30 border-blue-500/40 text-slate-200' 
-        : 'bg-slate-950/40 border-slate-800/60 text-slate-500 opacity-60'
-    }`;
-    box.innerHTML = `
-      <i data-lucide="${item.unlocked ? 'shield-check' : 'lock'}" class="w-6 h-6 mx-auto mb-2 ${item.unlocked ? 'text-blue-400' : 'text-slate-600'}"></i>
-      <span class="text-xs font-semibold block">${item.title}</span>
+  state.habits.forEach(habit => {
+    const card = document.createElement('div');
+    card.className = 'bg-slate-900/50 border border-slate-800 rounded-2xl p-4 flex items-center justify-between';
+    card.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center">🏃‍♂️</div>
+        <div>
+          <h4 class="font-bold text-slate-100 text-xs">${habit.title}</h4>
+          <span class="text-[10px] text-red-400 bg-red-950/40 px-2 py-0.5 rounded">${habit.time}</span>
+        </div>
+      </div>
+      <button onclick="switchTab('habit-detail')" class="px-3 py-1.5 bg-slate-800 hover:bg-blue-600 text-white text-[10px] font-semibold rounded-xl transition">Ver</button>
     `;
-    container.appendChild(box);
+    container.appendChild(card);
   });
-}  
+}
+
+function openModal() { document.getElementById('modal-habit').classList.remove('hidden'); }
+function closeModal() { document.getElementById('modal-habit').classList.add('hidden'); }
+function markHabitComplete() { alert('¡Hábito marcado como completado con éxito!'); switchTab('dashboard'); }
