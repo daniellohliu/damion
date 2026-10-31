@@ -240,4 +240,4 @@ function renderAvatarItems() {
     `;
     container.appendChild(box);
   });
-}
+}  
