@@ -1,133 +1,24 @@
-/* Estilos Cyberpunk / Dark Dashboard para DANMIUN */
+/* Personalizaciones de estilos adicionales */
 body {
-  background-color: #0a0e17;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-/* Efectos Neón */
-.neon-border-blue {
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+/* Transiciones suaves al cambiar de tema */
+.theme-transition {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-.animacion-celebrar {
-  animation: celebrar 0.5s ease-in-out;
+/* Estilos para el scroll en la interfaz */
+::-webkit-scrollbar {
+  width: 6px;
 }
-
-@keyframes celebrar {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3) rotate(10deg); }
-  100% { transform: scale(1); }
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-/* Transiciones suaves */
-li {
-  transition: all 0.2s ease-in-out;
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
 }
-
-li:hover {
-  border-color: rgba(56, 189, 248, 0.4);
-}
-/* Estilos Base y Temas para DANMIUN */
-body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
-/* Modo Claro (Tema Light Cyber) */
-body.theme-light {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
-}
-
-body.theme-light .theme-card {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-body.theme-light .theme-subcard {
-  background-color: #f8fafc !important;
-  border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-body.theme-light h2, 
-body.theme-light h3, 
-body.theme-light .text-white {
-  color: #0f172a !important;
-}
-
-/* Animaciones */
-.animacion-celebrar {
-  animation: celebrar 0.5s ease-in-out;
-}
-
-@keyframes celebrar {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3) rotate(10deg); }
-  100% { transform: scale(1); }
-}
-body { font-family: 'Segoe UI', system-ui, sans-serif; }
-
-/* Temas de Color Dinámicos */
-body.accent-blue { --accent: #38bdf8; }
-body.accent-green { --accent: #4ade80; }
-body.accent-purple { --accent: #c084fc; }
-body.accent-red { --accent: #f87171; }
-
-.text-sky-400 { color: var(--accent) !important; }
-.bg-sky-500 { background-color: var(--accent) !important; }
-.border-sky-500 { border-color: var(--accent) !important; }
-
-/* Modo Claro */
-body.theme-light { background-color: #f1f5f9 !important; color: #0f172a !important; }
-body.theme-light .theme-card { background-color: #ffffff !important; border-color: #e2e8f0 !important; }
-body.theme-light .theme-subcard { background-color: #f8fafc !important; border-color: #cbd5e1 !important; color: #0f172a !important; }
-body.theme-light h2, body.theme-light h3, body.theme-light .text-white { color: #0f172a !important; }
-
-.animacion-celebrar { animation: celebrar 0.5s ease-in-out; }
-@keyframes celebrar {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3) rotate(10deg); }
-  100% { transform: scale(1); }
-}
-body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0a0e17; color: #ffffff; }
-
-/* Scrollbars personalizados minimalistas */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #0d1117; }
-::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
-
-.animacion-celebrar { animation: celebrar 0.4s ease-in-out; }
-@keyframes celebrar {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0a0e17; color: #ffffff; }
-
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #0d1117; }
-::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
-
-.animacion-celebrar { animation: celebrar 0.4s ease-in-out; }
-@keyframes celebrar {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.25) rotate(5deg); }
-  100% { transform: scale(1); }
-}
-
-/* Estilo para elementos seleccionados en el Studio */
-.item-seleccionable {
-  background-color: #0d1117;
-  border: 1px solid #30363d;
-  transition: all 0.2s ease;
-}
-.item-seleccionable:hover {
-  border-color: #38bdf8;
-  transform: translateY(-2px);
-}
-.item-seleccionable.seleccionado {
-  border-color: #38bdf8;
-  background-color: rgba(56, 189, 248, 0.1);
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
 }

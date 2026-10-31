@@ -1,230 +1,243 @@
-// --- BASES DE DATOS MASIVAS (100+ Especies y 220+ Accesorios) ---
-const catEspecies = [
-  // Carnívoros / Felinos
-  { emoji: '🦁', nombre: 'León' }, { emoji: '🐯', nombre: 'Tigre' }, { emoji: '🐺', nombre: 'Lobo' }, { emoji: '🐆', nombre: 'Leopardo' },
-  { emoji: '🦊', nombre: 'Zorro' }, { emoji: '🐻', nombre: 'Oso Pardo' }, { emoji: '🐱', nombre: 'Gato' }, { emoji: '🐶', nombre: 'Perro' },
-  { emoji: '🦁', nombre: 'León Albino' }, { emoji: '🐯', nombre: 'Tigre Blanco' }, { emoji: '🦊', nombre: 'Zorro Ártico' }, { emoji: '🐺', nombre: 'Lobo Alfa' },
-  { emoji: '🐆', nombre: 'Pantera' }, { emoji: '🐅', nombre: 'Tigre Semental' }, { emoji: '🦝', nombre: 'Mapache' }, { emoji: '🦡', nombre: 'Tejón' },
-  
-  // Herbívoros / Mamíferos
-  { emoji: '🐼', nombre: 'Panda' }, { emoji: '🐰', nombre: 'Conejo' }, { emoji: '🐨', nombre: 'Koala' }, { emoji: '🐘', nombre: 'Elefante' },
-  { emoji: '🦒', nombre: 'Jirafa' }, { emoji: '🦓', nombre: 'Cebra' }, { emoji: '🦘', nombre: 'Canguro' }, { emoji: '🦥', nombre: 'Perezoso' },
-  { emoji: '🐿️', nombre: 'Ardilla' }, { emoji: '🦔', nombre: 'Erizo' }, { emoji: '🦛', nombre: 'Hipopótamo' }, { emoji: '🦏', nombre: 'Rinoceronte' },
-  { emoji: '🐪', nombre: 'Camello' }, { emoji: '🐫', nombre: 'Camello 2J' }, { emoji: '🦙', nombre: 'Llama' }, { emoji: '🐐', nombre: 'Cabra' },
-
-  // Aves, Reptiles y Fantasía
-  { emoji: '🦅', nombre: 'Águila' }, { emoji: '🦉', nombre: 'Búho' }, { emoji: '🐉', nombre: 'Dragón' }, { emoji: '🐍', nombre: 'Serpiente' },
-  { emoji: '🐢', nombre: 'Tortuga' }, { emoji: '🦖', nombre: 'T-Rex' }, { emoji: '🦕', nombre: 'Brontosaurio' }, { emoji: '🦇', nombre: 'Murciélago' },
-  { emoji: '🦢', nombre: 'Cisne' }, { emoji: '🦜', nombre: 'Loro' }, { emoji: '🦚', nombre: 'Pavo Real' }, { emoji: '🦖', nombre: 'Raptor' },
-
-  // Humanos Cyber y Especiales
-  { emoji: '👦', nombre: 'Chico Cyber' }, { emoji: '👧', nombre: 'Chica Cyber' }, { emoji: '🤖', nombre: 'Androide' }, { emoji: '👾', nombre: 'Alien' },
-  { emoji: '🧛‍♂️', nombre: 'Vampiro M' }, { emoji: '🧛‍♀️', nombre: 'Vampiro F' }, { emoji: '🥷', nombre: 'Ninja' }, { emoji: '🧙‍♂️', nombre: 'Mago' }
-  // (El sistema escala fácilmente para rellenar hasta más de 100 con variaciones dinámicas)
-];
-
-const catCabeza = [
-  { emoji: '', nombre: 'Ninguno' },
-  { emoji: '👑', nombre: 'Corona Real' }, { emoji: '🎧', nombre: 'Audífonos Pro' }, { emoji: '🧢', nombre: 'Gorra Neón' },
-  { emoji: '🎩', nombre: 'Sombrero' }, { emoji: '🪖', nombre: 'Casco Militar' }, { emoji: '🦄', nombre: 'Cuerno Unicornio' },
-  { emoji: '🎀', nombre: 'Moño Rosa' }, { emoji: '🥽', nombre: 'Gafas de Buceo' }, { emoji: '🤠', nombre: 'Vaquero' },
-  { emoji: '🎓', nombre: 'Birrete Univ.' }, { emoji: '🪶', nombre: 'Pluma Indígena' }, { emoji: '🦊', nombre: 'Orejas Zorro' },
-  { emoji: '👑', nombre: 'Diadema Oro' }, { emoji: '🧢', nombre: 'Gorra Atrás' }, { emoji: '🎧', nombre: 'Casco DJ' }
-];
-
-const catOjos = [
-  { emoji: '', nombre: 'Ninguno' },
-  { emoji: '🕶️', nombre: 'Gafas Oscuras' }, { emoji: '👓', nombre: 'Lentes Pro' }, { emoji: '🤖', nombre: 'Visor Cyber' },
-  { emoji: '💫', nombre: 'Ojos Mareados' }, { emoji: '👁️', nombre: 'Ojo Místico' }, { emoji: '💥', nombre: 'Impacto Visual' },
-  { emoji: '🕶️', nombre: 'Lentes Matrix' }, { emoji: '🥽', nombre: 'Visor Nocturno' }, { emoji: '🕶️', nombre: 'Gafas Sol Espejo' }
-];
-
-const catRopa = [
-  { emoji: '', nombre: 'Ninguno' },
-  { emoji: '🧥', nombre: 'Chaqueta Cuero' }, { emoji: '👔', nombre: 'Corbata Ejec.' }, { emoji: '🦺', nombre: 'Chaleco Seg.' },
-  { emoji: '🥋', nombre: 'Kimono Místico' }, { emoji: '🧣', nombre: 'Bufanda Invierno' }, { emoji: '🥼', nombre: 'Bata Lab' },
-  { emoji: '👚', nombre: 'Camisa Cyber' }, { emoji: '🧥', nombre: 'Abrigo Real' }, { emoji: '🥋', nombre: 'Armadura Ligera' }
-];
-
-const catExtra = [
-  { emoji: '', nombre: 'Ninguno' },
-  { emoji: '⭐', nombre: 'Aura Estelar' }, { emoji: '🔥', nombre: 'Fuego Interior' }, { emoji: '⚡', nombre: 'Rayos Energía' },
-  { emoji: '💖', nombre: 'Corazones' }, { emoji: '🌟', nombre: 'Destellos Brillo' }, { emoji: '☣️', nombre: 'Radioactivo' },
-  { emoji: '✨', nombre: 'Polvo Mágico' }, { emoji: '🔥', nombre: 'Llamas Azules' }, { emoji: '⚡', nombre: 'Pulso Eléctrico' }
-];
-
-// --- ESTADO LOCAL ---
-let puntos = localStorage.getItem('danmiun_puntos') ? parseInt(localStorage.getItem('danmiun_puntos')) : 0;
-let nivel = localStorage.getItem('danmiun_nivel') ? parseInt(localStorage.getItem('danmiun_nivel')) : 1;
-let completados = localStorage.getItem('danmiun_completados') ? parseInt(localStorage.getItem('danmiun_completados')) : 0;
-let racha = localStorage.getItem('danmiun_racha') ? parseInt(localStorage.getItem('danmiun_racha')) : 1;
-
-let currentBase = localStorage.getItem('danmiun_base') || '🦁';
-let currentCabeza = localStorage.getItem('danmiun_cabeza') || '';
-let currentOjos = localStorage.getItem('danmiun_ojos') || '';
-let currentRopa = localStorage.getItem('danmiun_ropa') || '';
-let currentExtra = localStorage.getItem('danmiun_extra') || '';
-
-let habitos = localStorage.getItem('danmiun_habitos') 
-  ? JSON.parse(localStorage.getItem('danmiun_habitos')) 
-  : ["📚 Estudiar 30 minutos", "💧 Tomar 2L de agua", "🏃 Ejercicio 20 mins"];
-
-let actividadSemanal = localStorage.getItem('danmiun_semana')
-  ? JSON.parse(localStorage.getItem('danmiun_semana'))
-  : [3, 5, 2, 8, 4, 6, 1];
-
-// --- DOM ELEMENTS ---
-const basePersonaje = document.getElementById('base-personaje');
-const layerCabeza = document.getElementById('layer-cabeza');
-const layerOjos = document.getElementById('layer-ojos');
-const layerRopa = document.getElementById('layer-ropa');
-const layerExtra = document.getElementById('layer-extra');
-const nombreEtapa = document.getElementById('nombre-etapa');
-const rangoNivel = document.getElementById('rango-nivel');
-const estadoRachaTexto = document.getElementById('estado-racha-texto');
-const spanPuntosText = document.getElementById('puntos-text');
-const barraExp = document.getElementById('barra-exp');
-
-const modalStudio = document.getElementById('modal-studio');
-const btnAbrirStudio = document.getElementById('btn-abrir-studio');
-const btnCerrarStudio = document.getElementById('btn-cerrar-studio');
-const btnGuardarStudio = document.getElementById('btn-guardar-studio');
-
-const inputHabito = document.getElementById('nuevo-habito-input');
-const btnAgregar = document.getElementById('btn-agregar');
-const contenedorHabitos = document.getElementById('contenedor-habitos');
-const btnReset = document.getElementById('btn-reset');
-
-// --- MODAL & TABS ---
-btnAbrirStudio.addEventListener('click', () => { modalStudio.classList.remove('hidden'); poblarGridsStudio(); });
-btnCerrarStudio.addEventListener('click', () => { modalStudio.classList.add('hidden'); });
-
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('border-sky-400', 'text-sky-400'); b.classList.add('border-transparent', 'text-gray-400'); });
-    e.target.classList.remove('border-transparent', 'text-gray-400'); e.target.classList.add('border-sky-400', 'text-sky-400');
-    
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-    document.getElementById(e.target.dataset.tab).classList.remove('hidden');
-  });
-});
-
-// Poblar elementos interactivos en el Studio
-function poblarGridsStudio() {
-  poblarGridUnico('grid-especies', catEspecies, currentBase, (val) => currentBase = val);
-  poblarGridUnico('grid-cabeza', catCabeza, currentCabeza, (val) => currentCabeza = val);
-  poblarGridUnico('grid-ojos', catOjos, currentOjos, (val) => currentOjos = val);
-  poblarGridUnico('grid-ropa', catRopa, currentRopa, (val) => currentRopa = val);
-  poblarGridUnico('grid-extra', catExtra, currentExtra, (val) => currentExtra = val);
-}
-
-function poblarGridUnico(gridId, lista, valorActual, callback) {
-  const grid = document.getElementById(gridId);
-  grid.innerHTML = '';
-  lista.forEach(item => {
-    const div = document.createElement('div');
-    div.className = `item-seleccionable p-3 rounded-xl text-center cursor-pointer flex flex-col items-center justify-center ${item.emoji === valorActual ? 'seleccionado' : ''}`;
-    div.innerHTML = `<span class="text-2xl">${item.emoji || '❌'}</span><span class="text-[10px] text-gray-400 mt-1 truncate w-full">${item.nombre}</span>`;
-    div.addEventListener('click', () => {
-      grid.querySelectorAll('.item-seleccionable').forEach(el => el.classList.remove('seleccionado'));
-      div.classList.add('seleccionado');
-      callback(item.emoji);
-    });
-    grid.appendChild(div);
-  });
-}
-
-btnGuardarStudio.addEventListener('click', () => {
-  guardarYActualizar();
-  modalStudio.classList.add('hidden');
-});
-
-// --- GRÁFICO CHART.JS ---
-let miGrafico;
-function inicializarGrafico() {
-  const ctx = document.getElementById('grafico-semanal').getContext('2d');
-  miGrafico = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
-      datasets: [{ data: actividadSemanal, backgroundColor: '#38bdf8', borderRadius: 6 }]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
-  });
-}
-
-// --- PERSISTENCIA Y UI ---
-function guardarYActualizar() {
-  localStorage.setItem('danmiun_puntos', puntos);
-  localStorage.setItem('danmiun_nivel', nivel);
-  localStorage.setItem('danmiun_completados', completados);
-  localStorage.setItem('danmiun_racha', racha);
-  localStorage.setItem('danmiun_base', currentBase);
-  localStorage.setItem('danmiun_cabeza', currentCabeza);
-  localStorage.setItem('danmiun_ojos', currentOjos);
-  localStorage.setItem('danmiun_ropa', currentRopa);
-  localStorage.setItem('danmiun_extra', currentExtra);
-  localStorage.setItem('danmiun_habitos', JSON.stringify(habitos));
-  localStorage.setItem('danmiun_semana', JSON.stringify(actividadSemanal));
-  actualizarUI();
-}
-
-function actualizarUI() {
-  rangoNivel.textContent = `Nivel ${nivel}`;
-  estadoRachaTexto.textContent = `Racha activa: ${racha} días 🔥`;
-
-  // Renderizar capas independientes
-  basePersonaje.textContent = currentBase;
-  layerCabeza.textContent = currentCabeza;
-  layerOjos.textContent = currentOjos;
-  layerRopa.textContent = currentRopa;
-  layerExtra.textContent = currentExtra;
-
-  let etapa = "Cachorro / Novato";
-  if (nivel >= 5 && nivel < 15) etapa = "Fase Juvenil";
-  else if (nivel >= 15 && nivel < 25) etapa = "Fase Adulta / Guerrera";
-  else if (nivel >= 25) etapa = "Fase Suprema / Legendaria";
-
-  nombreEtapa.textContent = etapa;
-
-  const expActual = puntos % 50;
-  spanPuntosText.textContent = `${expActual} / 50`;
-  barraExp.style.width = `${(expActual / 50) * 100}%`;
-
-  renderizarHabitos();
-}
-
-function renderizarHabitos() {
-  contenedorHabitos.innerHTML = "";
-  habitos.forEach((t, i) => {
-    const li = document.createElement('li');
-    li.className = "bg-[#0d1117] border border-gray-800 p-3 rounded-xl flex justify-between items-center text-xs";
-    li.innerHTML = `<span class="font-medium text-gray-200">${t}</span>
-      <div class="flex gap-2">
-        <button onclick="completarMision()" class="bg-sky-500/10 text-sky-400 border border-sky-500/30 px-2.5 py-1 rounded-lg font-bold">Completar</button>
-        <button onclick="borrarHabito(${i})" class="text-gray-500 hover:text-red-400">✕</button>
-      </div>`;
-    contenedorHabitos.appendChild(li);
-  });
-}
-
-window.completarMision = function() {
-  puntos += 10; completados += 1; actividadSemanal[0] += 1;
-  if (puntos >= nivel * 50) { nivel++; }
-  if (miGrafico) miGrafico.update();
-  guardarYActualizar();
+// Estado global de la aplicación
+const state = {
+  theme: 'dark', // 'dark' | 'light'
+  xp: 20,
+  maxXp: 50,
+  level: 1,
+  habits: [
+    { id: 1, title: 'Estudiar 30 minutos', completed: false, xp: 10 },
+    { id: 2, title: 'Tomar 2L de agua', completed: false, xp: 10 },
+    { id: 3, title: 'Ejercicio 30 min', completed: false, xp: 10 }
+  ],
+  weeklyActivity: [
+    { day: 'Lun', val: 7 },
+    { day: 'Mar', val: 12 },
+    { day: 'Mié', val: 5 },
+    { day: 'Jue', val: 9 },
+    { day: 'Vie', val: 14 },
+    { day: 'Sáb', val: 4 },
+    { day: 'Dom', val: 8 }
+  ],
+  avatarItems: [
+    { id: 1, title: 'Escudo Nómada', unlocked: true },
+    { id: 2, title: 'Capa Neón', unlocked: false },
+    { id: 3, title: 'Casco Titán', unlocked: false },
+    { id: 4, title: 'Aura Eléctrica', unlocked: false }
+  ]
 };
 
-btnAgregar.addEventListener('click', () => {
-  const t = inputHabito.value.trim();
-  if (t) { habitos.push(t); inputHabito.value = ""; guardarYActualizar(); }
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+  renderApp();
+  setupEventListeners();
+  lucide.createIcons();
 });
 
-window.borrarHabito = function(i) { habitos.splice(i, 1); guardarYActualizar(); };
+// Renderizar la interfaz
+function renderApp() {
+  renderHabits();
+  renderWeeklyChart();
+  renderAvatarItems();
+  updateProgressUI();
+}
 
-btnReset.addEventListener('click', () => {
-  if (confirm("¿Reiniciar todo el progreso de DANMIUN?")) { localStorage.clear(); location.reload(); }
-});
+// Configurar oyentes de eventos
+function setupEventListeners() {
+  // Cambio de modo claro / oscuro
+  document.getElementById('btn-toggle-theme').addEventListener('click', toggleTheme);
 
-actualizarUI();
-inicializarGrafico();
+  // Navegación por pestañas
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', (e) => switchTab(e.target.dataset.tab));
+  });
+
+  // Modal
+  document.getElementById('btn-open-modal').addEventListener('click', () => toggleModal(true));
+  document.getElementById('btn-close-modal').addEventListener('click', () => toggleModal(false));
+  document.getElementById('btn-cancel-modal').addEventListener('click', () => toggleModal(false));
+  document.getElementById('form-new-habit').addEventListener('submit', handleAddHabit);
+}
+
+// Alternar Tema (Oscuro / Claro)
+function toggleTheme() {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  const body = document.getElementById('app-body');
+  const iconSun = document.getElementById('icon-sun');
+  const iconMoon = document.getElementById('icon-moon');
+  const themeLabel = document.getElementById('theme-label');
+
+  if (state.theme === 'light') {
+    body.classList.remove('bg-slate-950', 'text-slate-100');
+    body.classList.add('bg-slate-50', 'text-slate-900');
+    iconSun.classList.remove('hidden');
+    iconMoon.classList.add('hidden');
+    themeLabel.textContent = 'Modo Claro';
+  } else {
+    body.classList.remove('bg-slate-50', 'text-slate-900');
+    body.classList.add('bg-slate-950', 'text-slate-100');
+    iconSun.classList.add('hidden');
+    iconMoon.classList.remove('hidden');
+    themeLabel.textContent = 'Modo Oscuro';
+  }
+}
+
+// Cambiar de Pestaña
+function switchTab(tabId) {
+  document.querySelectorAll('.nav-tab').forEach(btn => {
+    if (btn.dataset.tab === tabId) {
+      btn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
+      btn.classList.remove('text-slate-400');
+    } else {
+      btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
+      btn.classList.add('text-slate-400');
+    }
+  });
+
+  document.querySelectorAll('.view-content').forEach(view => {
+    view.classList.add('hidden');
+  });
+  document.getElementById(`view-${tabId}`).classList.remove('hidden');
+}
+
+// Renderizar Misiones/Hábitos
+function renderHabits() {
+  const container = document.getElementById('habits-list');
+  container.innerHTML = '';
+
+  state.habits.forEach(habit => {
+    const item = document.createElement('div');
+    item.className = `flex items-center justify-between p-3.5 rounded-xl border transition ${
+      habit.completed 
+        ? 'bg-blue-950/20 border-blue-500/30' 
+        : 'bg-slate-950/40 border-slate-800 hover:border-slate-700'
+    }`;
+
+    item.innerHTML = `
+      <div class="flex items-center gap-3">
+        <button onclick="toggleHabit(${habit.id})" class="w-5 h-5 rounded-md border flex items-center justify-center transition ${
+          habit.completed 
+            ? 'bg-blue-600 border-blue-500 text-white' 
+            : 'border-slate-700 hover:border-blue-500'
+        }">
+          ${habit.completed ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+        </button>
+        <span class="text-xs font-medium ${habit.completed ? 'line-through text-slate-500' : 'text-slate-200'}">
+          ${habit.title}
+        </span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-900/30 text-blue-400 border border-blue-500/20">
+          +${habit.xp} XP
+        </span>
+        <button onclick="deleteHabit(${habit.id})" class="text-slate-500 hover:text-red-400 transition">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+  lucide.createIcons();
+}
+
+// Completar/Descompletar Hábito
+function toggleHabit(id) {
+  const habit = state.habits.find(h => h.id === id);
+  if (!habit) return;
+
+  habit.completed = !habit.completed;
+  if (habit.completed) {
+    state.xp += habit.xp;
+    if (state.xp >= state.maxXp) {
+      state.level += 1;
+      state.xp = state.xp - state.maxXp;
+      state.maxXp += 20;
+    }
+  } else {
+    state.xp = Math.max(0, state.xp - habit.xp);
+  }
+
+  renderApp();
+}
+
+// Eliminar Hábito
+function deleteHabit(id) {
+  state.habits = state.habits.filter(h => h.id !== id);
+  renderApp();
+}
+
+// Agregar Nuevo Hábito
+function handleAddHabit(e) {
+  e.preventDefault();
+  const titleInput = document.getElementById('habit-title');
+  const xpInput = document.getElementById('habit-xp');
+
+  const newHabit = {
+    id: Date.now(),
+    title: titleInput.value.trim(),
+    completed: false,
+    xp: parseInt(xpInput.value) || 10
+  };
+
+  state.habits.push(newHabit);
+  titleInput.value = '';
+  toggleModal(false);
+  renderApp();
+}
+
+// Abrir/Cerrar Modal
+function toggleModal(show) {
+  const modal = document.getElementById('modal-new-habit');
+  if (show) {
+    modal.classList.remove('hidden');
+  } else {
+    modal.classList.add('hidden');
+  }
+}
+
+// Actualizar Barra de XP y Nivel
+function updateProgressUI() {
+  document.getElementById('badge-level').textContent = `Nivel ${state.level}`;
+  document.getElementById('xp-text').textContent = `${state.xp} / ${state.maxXp} XP`;
+  const pct = Math.min(100, Math.round((state.xp / state.maxXp) * 100));
+  document.getElementById('xp-bar').style.width = `${pct}%`;
+}
+
+// Renderizar Gráfica Semanal
+function renderWeeklyChart() {
+  const container = document.getElementById('weekly-bars');
+  container.innerHTML = '';
+  const maxVal = Math.max(...state.weeklyActivity.map(item => item.val));
+
+  state.weeklyActivity.forEach(item => {
+    const heightPct = Math.round((item.val / maxVal) * 100);
+    const bar = document.createElement('div');
+    bar.className = 'flex-1 flex flex-col items-center gap-2 h-full justify-end group';
+    bar.innerHTML = `
+      <div class="w-full bg-slate-800/80 rounded-lg group-hover:bg-blue-600/40 transition-all duration-300 relative overflow-hidden" style="height: ${heightPct}%">
+        <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-cyan-400 opacity-80"></div>
+      </div>
+      <span class="text-[10px] font-medium text-slate-400">${item.day}</span>
+    `;
+    container.appendChild(bar);
+  });
+}
+
+// Renderizar Items del Avatar
+function renderAvatarItems() {
+  const container = document.getElementById('avatar-items');
+  container.innerHTML = '';
+
+  state.avatarItems.forEach(item => {
+    const box = document.createElement('div');
+    box.className = `p-4 rounded-xl border text-center transition ${
+      item.unlocked 
+        ? 'bg-blue-950/30 border-blue-500/40 text-slate-200' 
+        : 'bg-slate-950/40 border-slate-800/60 text-slate-500 opacity-60'
+    }`;
+    box.innerHTML = `
+      <i data-lucide="${item.unlocked ? 'shield-check' : 'lock'}" class="w-6 h-6 mx-auto mb-2 ${item.unlocked ? 'text-blue-400' : 'text-slate-600'}"></i>
+      <span class="text-xs font-semibold block">${item.title}</span>
+    `;
+    container.appendChild(box);
+  });
+}
