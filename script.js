@@ -1,146 +1,74 @@
-// Estado Global de la App
-const state = {
-  lang: 'es', // 'es' | 'en'
-  theme: 'dark', // 'dark' | 'light'
-  user: { name: 'Andrew Nathan', email: 'andrew@gmail.com' },
-  habits: [
-    { id: 1, title: 'Daily Running', category: 'ongoing', completed: false, time: '22:34:04' },
-    { id: 2, title: 'Journaling & Reflection', category: 'upcoming', completed: false, time: '15:00:00' }
+// Estado del editor en PixelCraft
+const canvasState = {
+  elements: [
+    { id: 1, type: 'text', content: '¡Hola en PixelCraft!', x: 50, y: 50, color: '#ffffff' },
+    { id: 2, type: 'shape', content: 'Rectángulo', x: 200, y: 150, color: '#6366f1' }
   ],
-  weekly: [6, 12, 8, 14, 5, 11, 9]
-};
-
-// Traducciones
-const translations = {
-  es: {
-    subtitle: 'Estudio de Avatar y Gestor de Hábitos',
-    email_label: 'Correo electrónico',
-    user_label: 'Nombre de usuario',
-    pass_label: 'Contraseña',
-    btn_signup: 'Registrarse / Iniciar Sesión',
-    build_habit: '¡Construye un hábito hoy!',
-    habits_stats: 'Estadísticas de Hábitos',
-    habit_details: 'Detalles del Hábito',
-    neg_reinforce: 'Refuerzos Negativos (-)',
-    btn_complete: 'Marcar Hábito como Completado',
-    profile: 'Perfil de Usuario',
-    edit_profile: 'Editar Perfil'
-  },
-  en: {
-    subtitle: 'Master Avatar Studio & Habit Tracker',
-    email_label: 'Email address',
-    user_label: 'Username',
-    pass_label: 'Password',
-    btn_signup: 'Sign Up / Log In',
-    build_habit: 'Build a Habit Today!',
-    habits_stats: 'Habits Statistics',
-    habit_details: 'Habit Details',
-    neg_reinforce: 'Negative (-) Reinforcements',
-    btn_complete: 'Mark Habit As Complete',
-    profile: 'User Profile',
-    edit_profile: 'Edit Profile'
-  }
+  selectedId: null
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  setupEventListeners();
-  renderWeeklyBars();
-  renderHabitsList();
+  renderCanvas();
+  lucide.createIcons();
 });
 
-function setupEventListeners() {
-  // Autenticación simulada
-  document.getElementById('auth-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('auth-username').value;
-    state.user.name = username;
-    document.getElementById('header-username').textContent = username;
+// Añadir elementos al lienzo
+function addElement(type) {
+  const newElement = {
+    id: Date.now(),
+    type: type,
+    content: type === 'text' ? 'Nuevo Texto' : 'Forma',
+    x: Math.floor(Math.random() * 300) + 20,
+    y: Math.floor(Math.random() * 200) + 20,
+    color: type === 'text' ? '#38bdf8' : '#ec4899'
+  };
+  canvasState.elements.push(newElement);
+  renderCanvas();
+}
+
+// Renderizar el lienzo y las capas
+function renderCanvas() {
+  const board = document.getElementById('canvas-board');
+  const layersList = document.getElementById('layers-list');
+  board.innerHTML = '';
+  layersList.innerHTML = '';
+
+  canvasState.elements.forEach(el => {
+    // Crear elemento visual en el lienzo
+    const div = document.createElement('div');
+    div.className = `absolute p-3 rounded-xl cursor-move border transition-all ${
+      canvasState.selectedId === el.id ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-slate-700/50'
+    }`;
+    div.style.left = `${el.x}px`;
+    div.style.top = `${el.y}px`;
+    div.style.backgroundColor = el.type === 'shape' ? el.color : 'transparent';
+    div.style.color = el.color;
+    div.innerHTML = el.type === 'text' ? `<span class="font-bold text-sm">${el.content}</span>` : `<span class="text-xs text-white font-semibold">${el.content}</span>`;
     
-    document.getElementById('auth-container').classList.add('hidden');
-    document.getElementById('main-app').classList.remove('hidden');
-  });
+    // Evento de selección
+    div.addEventListener('click', (e) => {
+      e.stopPropagation();
+      canvasState.selectedId = el.id;
+      renderCanvas();
+    });
 
-  // Cambio de Idioma
-  document.getElementById('btn-toggle-lang').addEventListener('click', toggleLanguage);
-  document.getElementById('btn-lang-main').addEventListener('click', toggleLanguage);
+    board.appendChild(div);
 
-  // Cambio de Tema
-  document.getElementById('btn-toggle-theme-auth').addEventListener('click', toggleTheme);
-  document.getElementById('btn-theme-main').addEventListener('click', toggleTheme);
-
-  // Crear Hábito
-  document.getElementById('form-new-habit').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const title = document.getElementById('new-habit-title').value;
-    state.habits.push({ id: Date.now(), title, category: 'ongoing', completed: false, time: '00:00:00' });
-    document.getElementById('new-habit-title').value = '';
-    closeModal();
-    renderHabitsList();
-  });
-}
-
-function toggleLanguage() {
-  state.lang = state.lang === 'es' ? 'en' : 'es';
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (translations[state.lang][key]) {
-      el.textContent = translations[state.lang][key];
-    }
+    // Crear item en la lista lateral de capas
+    const layerItem = document.createElement('div');
+    layerItem.className = `p-2.5 rounded-lg border text-xs flex justify-between items-center cursor-pointer transition ${
+      canvasState.selectedId === el.id ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+    }`;
+    layerItem.innerHTML = `<span>${el.type.toUpperCase()}: ${el.content}</span>`;
+    layerItem.addEventListener('click', () => {
+      canvasState.selectedId = el.id;
+      renderCanvas();
+    });
+    layersList.appendChild(layerItem);
   });
 }
 
-function toggleTheme() {
-  state.theme = state.theme === 'dark' ? 'light' : 'dark';
-  const body = document.getElementById('app-body');
-  if (state.theme === 'light') {
-    body.classList.remove('bg-slate-950', 'text-slate-100');
-    body.classList.add('bg-slate-100', 'text-slate-900');
-  } else {
-    body.classList.remove('bg-slate-100', 'text-slate-900');
-    body.classList.add('bg-slate-950', 'text-slate-100');
-  }
+// Simular exportación
+function exportCanvas() {
+  alert('¡Diseño exportado con éxito desde PixelCraft!');
 }
-
-function switchTab(tabId) {
-  document.querySelectorAll('.view-screen').forEach(screen => screen.classList.add('hidden'));
-  document.getElementById(`view-${tabId}`).classList.remove('hidden');
-}
-
-function renderWeeklyBars() {
-  const container = document.getElementById('dashboard-weekly-bars');
-  container.innerHTML = '';
-  const max = Math.max(...state.weekly);
-  
-  state.weekly.forEach(val => {
-    const height = Math.round((val / max) * 100);
-    const bar = document.createElement('div');
-    bar.className = 'flex-1 bg-gradient-to-t from-blue-600 to-cyan-400 rounded-t-lg transition-all';
-    bar.style.height = `${height}%`;
-    container.appendChild(bar);
-  });
-}
-
-function renderHabitsList() {
-  const container = document.getElementById('dashboard-habits-list');
-  container.innerHTML = '';
-
-  state.habits.forEach(habit => {
-    const card = document.createElement('div');
-    card.className = 'bg-slate-900/50 border border-slate-800 rounded-2xl p-4 flex items-center justify-between';
-    card.innerHTML = `
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center">🏃‍♂️</div>
-        <div>
-          <h4 class="font-bold text-slate-100 text-xs">${habit.title}</h4>
-          <span class="text-[10px] text-red-400 bg-red-950/40 px-2 py-0.5 rounded">${habit.time}</span>
-        </div>
-      </div>
-      <button onclick="switchTab('habit-detail')" class="px-3 py-1.5 bg-slate-800 hover:bg-blue-600 text-white text-[10px] font-semibold rounded-xl transition">Ver</button>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function openModal() { document.getElementById('modal-habit').classList.remove('hidden'); }
-function closeModal() { document.getElementById('modal-habit').classList.add('hidden'); }
-function markHabitComplete() { alert('¡Hábito marcado como completado con éxito!'); switchTab('dashboard'); }
